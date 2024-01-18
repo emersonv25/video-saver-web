@@ -2,7 +2,6 @@
 import { Button } from '@nextui-org/button'
 import React, { useState } from 'react'
 import { Input } from '@nextui-org/input'
-import Link from 'next/link';
 import { IoMdSearch } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 
