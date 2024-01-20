@@ -2,6 +2,20 @@ import CardInfo from "@/components/card-info";
 import { title, subtitle } from "@/components/primitives";
 import SearchForm from "@/components/search-form";
 
+async function getVideoInfo(url: string) {
+	try {
+	  const res = await fetch(`${process.env.API}/video/${url}/info`);
+	  if (!res.ok) {
+		const errorData = await res.json();
+		throw new Error(`${errorData.message}`);
+	  }
+  
+	  return res.json();
+	} catch (error) {
+	  throw error;
+	}
+  }
+  
 export default function Home() {
 	return (
 		<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -14,7 +28,6 @@ export default function Home() {
 				</h2>
 			</div>
 			<SearchForm></SearchForm>
-			<CardInfo></CardInfo>
 		</section>
 	);
 }

@@ -1,8 +1,8 @@
-'use client'
+import { InfoVideoDto } from "@/types/VideoDto";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, Image, Select, SelectItem } from "@nextui-org/react";
 
-export default function CardInfo() {
+export default function CardInfo({ videoInfo }: { videoInfo: InfoVideoDto }) {
   const items = [{
     value: '22',
     label: 'MP4 - HD - (1280x720)'
@@ -21,7 +21,7 @@ export default function CardInfo() {
               className="object-cover"
               height={200}
               shadow="md"
-              src="https://i.ytimg.com/vi/QdBZY2fkU-0/maxresdefault.jpg"
+              src={videoInfo.thumbnail}
               width="100%"
             />
           </div>
@@ -29,16 +29,15 @@ export default function CardInfo() {
           <div className="flex flex-col col-span-6 md:col-span-8">
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0">
-                <h1 className="text-large font-medium mt-2">Grand Theft Auto VI Trailer 1</h1>
-                <h3 className="font-semibold text-foreground/90">Rockstar Games</h3>
-                <p className="text-small text-foreground/80">1:30</p>
-                <div className="mt-2 mb-4">
+                <h1 className="text-large font-medium mt-2">{videoInfo.title}</h1>
+                <p className="text-small text-foreground/80">{videoInfo.duration}</p>
+                <div className="mt-2 mb-4 w-96">
                   <Select
-                    items={items}
+                    items={videoInfo.formats}
                     placeholder="Selecione o formato"
                     size="sm"
                   >
-                    {(item) => <SelectItem key={item.value}>{item.label}</SelectItem>}
+                    {(item) => <SelectItem key={item.format_id}>{`${item.ext} - (${item.resolution}) - ${item.fps ? item.fps + 'fps' : ''} ${item.filesize ? ' - (' + bytesToMiB(item.filesize) + 'MiB)' : ''}`}</SelectItem>}
                   </Select>
                 </div>
               </div>
@@ -59,4 +58,8 @@ export default function CardInfo() {
       </CardBody>
     </Card>
   );
+}
+function bytesToMiB(bytes: number) {
+  const mebibytes = bytes / Math.pow(2, 20);
+  return Math.round(mebibytes);
 }
