@@ -37,7 +37,7 @@ export default function CardInfo({ videoInfo }: { videoInfo: InfoVideoDto }) {
                     placeholder="Selecione o formato"
                     size="sm"
                   >
-                    {(item) => <SelectItem key={item.format_id}>{`${item.ext} - (${item.resolution}) - ${item.fps ? item.fps + 'fps' : ''} ${item.filesize ? ' - (' + bytesToMiB(item.filesize) + 'MiB)' : ''}`}</SelectItem>}
+                    {(format) => <SelectItem key={format.format_id}>{getFormatSelect(format)}</SelectItem>}
                   </Select>
                 </div>
               </div>
@@ -59,7 +59,38 @@ export default function CardInfo({ videoInfo }: { videoInfo: InfoVideoDto }) {
     </Card>
   );
 }
+function getFormatSelect(format: any) {
+  let ext = format.ext ? `${format.ext.toUpperCase()} - ` : '';
+  let quality = getQuality(format.resolution);
+  let resolution = format.resolution ? ` - (${format.resolution})` : '';
+  let fps = format.fps ? ` - ${format.fps} fps` : '';
+  let size = format.filesize ? ` - (${bytesToMiB(format.filesize)} MiB)` : '';
+
+  return ext + quality + resolution + fps + size;
+}
+
 function bytesToMiB(bytes: number) {
   const mebibytes = bytes / Math.pow(2, 20);
   return Math.round(mebibytes);
+}
+
+function getQuality(resolution: string) {
+  if(resolution == 'audio only')
+  {
+    return '';
+  }
+  const [width, height] = resolution.split('x').map(Number);
+  const pixels = height >= width ? height : width;
+
+  if (pixels >= 2160) {
+    return '4K';
+  } else if (pixels >= 1440) {
+    return 'Quad HD';
+  } else if (pixels >= 1080) {
+    return 'Full HD';
+  } else if (pixels >= 720) {
+    return 'HD';
+  } else  {
+    return 'SD';
+  }
 }

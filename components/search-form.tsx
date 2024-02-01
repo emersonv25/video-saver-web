@@ -17,12 +17,12 @@ export default function SearchForm() {
     const handleConsultarClick = async () => {
         if (validateUrl()) {
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API}/video/info`, {
-                    method: 'POST',
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API}/video/info?url=${url}`, {
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ url: url }),
+                    // body: JSON.stringify({ url: url }),
                 });
                 console.log(res)
                 if (!res.ok) {
