@@ -9,12 +9,15 @@ export default function SearchForm() {
     const [url, setUrl] = useState('');
     const [error, setError] = useState('');
     const [videoInfo, setVideoInfo] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const validateUrl = () => {
         const urlRegex = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
         return urlRegex.test(url);
     };
+
     const handleConsultarClick = async () => {
+        setIsLoading(true);
         if (validateUrl()) {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API}/video/info?url=${url}`, {
@@ -22,9 +25,7 @@ export default function SearchForm() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    // body: JSON.stringify({ url: url }),
                 });
-                console.log(res)
                 if (!res.ok) {
                     const errorData = await res.json();
                     throw new Error(`${errorData.message}`);
@@ -34,11 +35,12 @@ export default function SearchForm() {
                 setVideoInfo(data);
                 setError('');
             } catch (error) {
-                setError(error.message);
+                setError((error as Error).message);
             }
         } else {
             setError('Placa inválida');
         }
+        setIsLoading(false);
     };
 
     return (
@@ -58,7 +60,7 @@ export default function SearchForm() {
                     startContent={<IoMdSearch />}
                 />
                 {error && <p className="text-red-500 w-full text-center">{error}</p>}
-                <Button color="primary" size="lg" onClick={handleConsultarClick}>
+                <Button color="primary" size="lg" onClick={handleConsultarClick} isLoading={isLoading}>
                     Buscar
                 </Button>
             </div>        
