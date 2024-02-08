@@ -2,7 +2,6 @@
 import { InfoVideoDto } from "@/types/VideoDto";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, Image, Select, SelectItem } from "@nextui-org/react";
-import { url } from "inspector";
 import { ChangeEvent, useState } from "react";
 
 
@@ -31,7 +30,9 @@ export default function CardInfo({ videoInfo }: { videoInfo: InfoVideoDto }) {
 
   const download = async (format_id: string) => {
     const format = videoInfo.formats.find((f) => f.format_id === format_id);
-    const downloadUrl = `${process.env.NEXT_PUBLIC_API}/video/download?url=${encodeURIComponent(format.url)}&format=${encodeURIComponent(format_id)}`;
+    console.log(format)
+    
+    const downloadUrl = `${process.env.NEXT_PUBLIC_API}/video/download?url=${encodeURIComponent(videoInfo.url)}&format=${encodeURIComponent(format_id)}`;
     window.open(downloadUrl, '_blank');
 
     // const response = await fetch(`${process.env.NEXT_PUBLIC_API}/video/download?url=${url}&format=${format}`, {
@@ -97,23 +98,33 @@ export default function CardInfo({ videoInfo }: { videoInfo: InfoVideoDto }) {
                     defaultSelectedKeys=""
                     onChange={(event: ChangeEvent<HTMLSelectElement>) => setFormatId(event.target.value)}
                   >
-                    {videoInfo.formats.map((format, index) =>
-                      <SelectItem key={`${format.format_id}-${index}`} value={format.format_id}>
-                        {getFormatSelect(format)}
+                    {videoInfo.formats.map((f) =>
+                      <SelectItem key={`${f.format_id}`}>
+                        {getFormatSelect(f)}
                       </SelectItem>
                     )}
                   </Select>
                 </div>
                 <div className="flex w-full items-center justify-center">
-                  <Button
-                    className="data-[hover]:bg-foreground/10"
+                <Button
+                    className="data-[hover]:bg-foreground/10 m-2"
                     radius="full"
                     color="success"
                     variant="shadow"
                     // onClick={() => download(videoInfo.url, format)}
                     onClick={() => downloadDireto(formatId)}
                   >
-                    Download
+                    Download Cliente
+                  </Button>
+                  <Button
+                    className="data-[hover]:bg-foreground/10 m-2"
+                    radius="full"
+                    color="primary"
+                    variant="shadow"
+                    // onClick={() => download(videoInfo.url, format)}
+                    onClick={() => download(formatId)}
+                  >
+                    Download Servidor
                   </Button>
                 </div>
               </div>
