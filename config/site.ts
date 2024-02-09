@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-	name: "Save Video",
-	description: "Baixe videos de qualquer site aqui",
+	name: "Video Saver",
+	description: "Baixe videos de qualquer site aqui, de forma rápida, simples e gratís",
 	navItems: [
 		{
 			label: "Home",
